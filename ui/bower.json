@@ -1,0 +1,17 @@
+{
+  "name": "url-shortener",
+  "description": "",
+  "main": "app.js",
+  "authors": [
+    "andreykachkin"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/andreykachkin/url-shortener",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "font-awesome": "^4.6.3",
+    "angular": "^1.5.8",
+    "angular-route": "^1.5.8"
+  }
+}
