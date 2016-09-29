@@ -1,0 +1,113 @@
+<%if (user) { %>
+
+<div class="container">
+
+    <div class="row">
+        <div class="container"><h1 class="text-center">Сокращатель ссылок</h1></div>
+        <div class="col-md-4">
+            <p>Для того, чтобы сократить ссылку, введите адрес ссылки в поле URL и нажмите кнопку "Сократить".</p>
+            <p>Так же Вы можете добавить описание и список тегов, облегчающие поиск ссылки.</p>
+        </div>
+
+        <div class="col-md-4">
+            <form action="/createUrl" method="post">
+                <div class="form-group">
+                    <input class="form-control" name="url" type="text" placeholder="Введите URL" >
+                </div>
+                <div class="form-group">
+                    <textarea name="description" id="" rows="2" class="form-control" placeholder="Добавьте описание"></textarea>
+                </div>
+                <div class="form-group">
+                    <textarea name="tags" id="" rows="2" class="form-control" placeholder="Добавьте через пробел теги"></textarea>
+                </div>
+                <div class="form-group">
+                <button type="submit" class="btn-block btn btn-primary btn-lg">Сократить</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-4 text-center" >
+            <i class="fa fa-link" style="font-size: 250px"></i>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="well text-center">
+                Пользователь <b><%=user.username.toUpperCase()%></b>, общее количество переходов по вашим ссылкам = <b>{{totalAuthCounter()}}</b>.
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover ">
+            <thead>
+            <tr class="active info">
+                <th></th>
+                <th>Короткий URL</th>
+                <th>Длинный URL</th>
+                <th>Описание</th>
+                <th>Теги</th>
+                <th>Кол-во переходов</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="url in urls | orderBy: sortParam">
+                <td>
+                    <button class="btn btn-default glyphicon glyphicon-pencil" title="Редактировать" data-toggle="modal" data-target="#Modal-{{url._id}}"></button>
+                    <div class="modal fade" id="Modal-{{url._id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form action="/updateUrl" method="post">
+                                    <div class="modal-header form-group">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                            <a href="" class="glyphicon glyphicon-remove"></a></button>
+                                        <h4 class="modal-title" id="myModalLabel">Изменение ссылки <a href="{{url.url_long}}" target="_blank" >{{url.url_long}}</a></h4>
+                                    </div>
+                                    <div class="form-group modal-body">
+                                        <input class="form-control" type="hidden" name="_id" value="{{url._id}}">
+                                        <h3>Описание</h3>
+                                        <textarea class="form-control" name="description" type="text">{{url.description}}</textarea>
+                                        <h3>Теги</h3>
+                                        <textarea class="form-control" name="tags" type="text">{{tagsArr(url.tags)}}</textarea>
+                                    </div>
+                                    <div class="modal-footer form-group">
+                                        <button class="btn btn-primary">Сохранить изменения</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td><a href="{{url.url_short}}" target="_blank">{{url.url_short}}</a></td>
+                <td><a href="{{url.url_long}}" target="_blank">{{url.url_long}}</a></td>
+                <td>{{url.description}} </td>
+                <td>
+                    <li ng-repeat="tag in url.tags" style="list-style-type: none">
+                        <a href="/tags/{{tag}}">{{tag}}</a>
+                    </li>
+                </td>
+                <td>{{url.counter}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<%} else {%>
+
+<div class="container text-center" style="margin-top: 100px">
+    <i class="fa fa-5x fa-exclamation-triangle"></i>
+    <p>Вы не авторизованы</p>
+    <p>Войдите или зарегистрируйтесь</p>
+    <div class="row">
+        <a href="/template/login" class="btn btn-primary"><i class="fa fa-sign-in"></i> Вход на сайт</a>
+        <a href="/template/registration" class="btn btn-primary"><i class="fa fa-user-plus"></i> Регистрация</a>
+    </div>
+</div>
+
+<%}%>

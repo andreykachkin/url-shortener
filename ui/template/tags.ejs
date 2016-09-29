@@ -1,0 +1,35 @@
+<h1 class="text-center" style="margin-bottom: 30px">Список всех ссылок с тегом <a href="/tags/{{tag_id}}">{{tag_id}}</a></h1>
+<div class="container">
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr class=" info">
+                    <th>Автор</th>
+                    <th>Короткий URL</th>
+                    <th>Длинный URL</th>
+                    <th>Описание</th>
+                    <th>Теги</th>
+                    <th>Кол-во переходов</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="url in urls | filter: {tags: tag_id}">
+                    <td>{{url.author}}</td>
+                    <td><a href="{{url.url_short}}">{{url.url_short}}</a></td>
+                    <td><a href="{{url.url_long}}">{{url.url_long}}</a></td>
+                    <td>{{url.description}} </td>
+                    <td>
+                        <li ng-repeat="tag in url.tags" style="list-style-type: none">
+                            <a href="/tags/{{tag}}">{{tag}}</a>
+                        </li>
+                    </td>
+                    <td>{{url.counter}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+

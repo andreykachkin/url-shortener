@@ -1,0 +1,38 @@
+<div class="container text-center">
+    <h3 style="margin-bottom: 40px">Подробная информация о ссылке <a href="{{url.url_long}}">{{url.url_long}}</a></h3>
+    <div class="row">
+        <div class="col-md-2">
+            <span class="glyphicon glyphicon-user"></span>
+            <p>
+                <strong>Автор:</strong>
+            </p>
+            <p>{{url.author}}</p>
+        </div>
+        <div class="col-md-4">
+            <span class="glyphicon glyphicon-triangle-right"></span>
+            <span class="glyphicon glyphicon-link"></span>
+            <span class="glyphicon glyphicon-triangle-left"></span>
+            <p>
+                <strong>Короткий URL:</strong>
+            </p>
+            <p><a href="/{{url.url_short}}">{{url.url_short}}</a></p>
+        </div>
+        <div class="col-md-3">
+            <span class="glyphicon glyphicon-list-alt"></span>
+            <p>
+                <strong>Теги:</strong>
+            </p>
+            <p ng-repeat="tag in url.tags">
+                <a href="/tags/{{tag}}">{{tag}}</a>
+            </p>
+        </div>
+        <div class="col-md-3">
+            <span class="glyphicon glyphicon-comment"></span>
+            <p>
+                <strong>Описание:</strong>
+            </p>
+            <p>{{url.description}}</p>
+        </div>
+    </div>
+</div>
+

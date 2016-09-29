@@ -1,0 +1,23 @@
+<div class="jumbotron">
+    <div class="container">
+        <h1>URL Shortener!</h1>
+        <p>Для сокращения ссылки необходим <a href="/template/login" class="btn btn-primary"><i class="fa fa-sign-in"></i> Вход на сайт</a> или <a href="/template/registration" class="btn btn-primary"><i class="fa fa-user-plus"></i> Регистрация</a>.</p>
+        <p>Достаточно ввести длинную ссылку в поле для вода, нажать «Сократить» — и получить красивенькую короткую ссылочку вместо непонятного набора символов, не умещающегося в пару-тройку строчек.</p>
+        <p>Надеемся, наш «Сокращатель» окажется полезным для Вас!</p>
+        <p><a class="btn btn-primary" target="_blank" href="https://ru.wikipedia.org/wiki/%D0%A1%D0%BE%D0%BA%D1%80%D0%B0%D1%89%D0%B5%D0%BD%D0%B8%D0%B5_URL" role="button">Подробнее о сокращении URL
+                <i class="fa fa-external-link"></i>
+            </a></p>
+    </div>
+</div>
+
+<div class="container">
+    <h2 style="text-align: center; margin-bottom: 40px">Последние сокращенные ссылки</h2>
+    <div class="row">
+        <div class="col-md-3 urls" ng-repeat="url in urls | orderBy: sortParam" >
+            <img src="https://www.google.com/s2/favicons?domain={{url.url_long}}" alt="">
+            <h4><a href="{{url.url_long}}" target="_blank">{{url.url_long}}</a></h4>
+            <p>{{url.description}}</p>
+            <p><a class="btn btn-default" href="/url/{{url._id}}" role="button">Посмотреть детали &raquo;</a></p>
+        </div>
+    </div>
+</div>
