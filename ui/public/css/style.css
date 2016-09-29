@@ -1,0 +1,17 @@
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+.jumbotron {
+    background-image: url(/img/jumbotron.jpg);
+    color: #d6d6d6
+}
+
+.urls {
+    height: 220px;
+}
+
+span.glyphicon {
+    font-size: 100px;
+}
