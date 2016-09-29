@@ -12,6 +12,9 @@ mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name);
 
 var app = express();
 
+app.set('views', path.join(__dirname, 'ui/template'));
+app.set('view engine', 'ejs');
+
 app.use(logger('dev'));
 
 app.use(cookieParser());
@@ -27,9 +30,14 @@ app.use(session({
     store: new MongoStore({mongooseConnection: mongoose.connection})
 }));
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'ui/public')));
 
 require('./api/routes')(app);
+
+app.get('/*',function(req, res){
+    res.render('index');
+});
+
 
 app.listen(port, function(){
    console.log('Server listening on port 3000')
