@@ -6,12 +6,14 @@ var mongoose = require('mongoose');
 var session = require('express-session');
 var config = require('./api/configBD');
 var MongoStore = require('connect-mongo')(session);
+var engine = require('ejs-locals');
 var port = process.env.PORT || 3000;
 
 mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name);
 
 var app = express();
 
+app.engine('ejs', engine);
 app.set('views', path.join(__dirname, 'ui/template'));
 app.set('view engine', 'ejs');
 
@@ -34,11 +36,13 @@ app.use(express.static(path.join(__dirname, 'ui/public')));
 
 require('./api/routes')(app);
 
-app.get('/*',function(req, res){
+app.use('/*', function(req, res){
     res.render('index');
 });
-
 
 app.listen(port, function(){
    console.log('Server listening on port 3000')
 });
+
+module.exports = app;
+
