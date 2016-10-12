@@ -35,15 +35,15 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 
 }]);
 
-app.controller('RegCtrl',['$scope', '$http', '$location','$window', function($scope, $http, $location, $window){
+app.controller('RegCtrl',['$scope', '$http', '$location','$route', function($scope, $http, $location, $route){
     $scope.reg = function() {
         var data = {
             username: $scope.username,
             password: $scope.password
         };
         $http.post('/registration', data).success(function() {
-            $location.path('/');
-            $window.location.reload();
+            $route.reload();
+            $location.path('/template/personal_info');
         }).error(function(){
             var regError = angular.element(document.querySelector('#error'));
             var error = angular.element('<p class="text-danger">Пользователь с таким именем уже существует.</p>');
@@ -58,15 +58,15 @@ app.controller('RegCtrl',['$scope', '$http', '$location','$window', function($sc
     };
 }]);
 
-app.controller('AuthCtrl',['$scope', '$http', '$location','$window', function($scope, $http, $location, $window){
+app.controller('AuthCtrl',['$scope', '$http', '$location', '$route', function($scope, $http, $location, $route){
     $scope.checkAuth = function() {
         var data = {
             username: $scope.username,
             password: $scope.password
         };
         $http.post('/authentication', data).success(function() {
-            $location.path('/');
-            $window.location.reload();
+            $route.reload();
+            $location.path('/template/personal_info');
         }).error(function(){
             var authError = angular.element(document.querySelector('#error'));
             var error = angular.element('<p class="text-danger">Неправильный логин или пароль</p>');
@@ -81,7 +81,7 @@ app.controller('AuthCtrl',['$scope', '$http', '$location','$window', function($s
     };
 }]);
 
-app.controller('UrlAuthListCtrl', function($scope, $http){
+app.controller('UrlAuthListCtrl',[ '$scope', '$http', '$route', function($scope, $http, $route){
 
     $http.get('/urlsAuth').success(function(data){
         $scope.sortParam = '-_id';
@@ -95,11 +95,24 @@ app.controller('UrlAuthListCtrl', function($scope, $http){
         };
         $scope.tagsArr = function (tags) {
             return tags.join(' ');
-        }
+        };
     }).error(function(){
 
     });
-});
+
+    $scope.createUrl = function() {
+        var data = {
+            url_long : $scope.url_long,
+            description : $scope.description,
+            tags : $scope.tags
+        };
+        $http.post('/createUrl', data).success(function() {
+            $route.reload();
+        }).error(function() {
+
+        })
+    };
+}]);
 
 app.controller('UrlsListCtrl', ['$scope', '$http', function($scope, $http){
 
@@ -113,7 +126,7 @@ app.controller('UrlsListCtrl', ['$scope', '$http', function($scope, $http){
 }]);
 
 
-app.controller('UrlDetailCtrl',['$scope','$http', '$routeParams', function($scope, $http, $routeParams) {
+app.controller('UrlDetailCtrl',['$scope','$http', '$routeParams', '$route', function($scope, $http, $routeParams, $route) {
     $scope.url_id = $routeParams.url_id;
 
     var url = '/url/' + $routeParams.url_id;
@@ -121,6 +134,19 @@ app.controller('UrlDetailCtrl',['$scope','$http', '$routeParams', function($scop
     $http.get(url).success(function(data) {
         $scope.url = data;
     });
+
+    $scope.updateUrl = function() {
+        var data = {
+            _id : $scope.url_id,
+            description : $scope.description,
+            tags : $scope.tags
+        };
+        $http.post('/updateUrl', data).success(function() {
+            $route.reload();
+        }).error(function() {
+
+        })
+    };
 }]);
 
 app.controller('TagListCtrl', ['$scope', '$http', '$routeParams', function($scope, $http, $routeParams){
