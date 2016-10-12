@@ -10,7 +10,7 @@ module.exports = function (app) {
 
     app.use(require('./loadUser'));
 
-    app.post('/authentication', jsonParser, function(req, res, next){
+    app.post('/authentication', urlencodedParser, jsonParser, function(req, res, next){
         var username = req.body.username;
         var password = req.body.password;
 
@@ -19,7 +19,7 @@ module.exports = function (app) {
             if (user) {
                 if (user.password === password) {
                     req.session.user = user.username;
-                    res.sendStatus(200);
+                    res.send(user);
 
                 } else {
                     res.sendStatus(401);
@@ -30,47 +30,46 @@ module.exports = function (app) {
         })
     });
 
-    app.post('/createUrl', urlencodedParser, function(req, res, next){
-        var url_long = req.body.url;
+    app.post('/createUrl', urlencodedParser, jsonParser, function(req, res, next){
+        var url_long = req.body.url_long;
         var description = req.body.description;
         var tags = req.body.tags.toLowerCase().split(' ');
+        var author = req.session.user || req.body.author;
 
         Url.findOne({url_long: url_long}, function(err, url){
             if (err) return next(err);
             if(url) {
-                res.redirect('/template/personal_info');
-                //res.send({shortUrl: url.url_short});
+                res.send(url);
             } else {
                 var newUrl = new Url({
-                    author: req.session.user,
+                    author: author,
                     url_long: url_long,
                     description: description,
                     tags: tags
                 });
                 newUrl.save(function(err){
                     if (err) return next(err);
-                    res.redirect('/template/personal_info');
-                    //res.send({shortUrl: newUrl.url_short});
+                    res.send(newUrl);
                 });
             }
         });
     });
 
-    app.post('/updateUrl', urlencodedParser, function(req, res, next) {
+    app.post('/updateUrl', jsonParser, urlencodedParser, function(req, res, next) {
         var description = req.body.description;
         var tags = req.body.tags.toLowerCase().split(' ');
         var _id = req.body._id;
 
-        Url.findByIdAndUpdate({_id: _id}, {$set: {description: description, tags: tags}}, function (err) {
+        Url.findByIdAndUpdate({_id: _id}, {$set: {description: description, tags: tags}}, function (err, url) {
             if (err) {
                 return next(err);
             } else {
-                res.redirect('/');
+                res.send(url);
             }
         });
     });
 
-    app.post('/registration', jsonParser, function(req, res, next){
+    app.post('/registration', urlencodedParser, jsonParser, function(req, res, next){
         var username = req.body.username.toLowerCase();
         var password = req.body.password;
 
@@ -83,7 +82,7 @@ module.exports = function (app) {
                 user.save(function (err) {
                     if (err) return next(err);
                     req.session.user = user.username;
-                    res.sendStatus(200);
+                    res.send(user);
                 });
             }
         })
@@ -91,7 +90,7 @@ module.exports = function (app) {
 
     app.post('/logout', function (req, res){
         req.session.destroy();
-        //res.redirect('/');
+        res.redirect('/');
     });
 
     app.get('/urlsAuth', function (req, res, next) {
