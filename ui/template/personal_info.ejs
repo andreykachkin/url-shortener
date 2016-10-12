@@ -7,21 +7,22 @@
         <div class="col-md-4">
             <p>Для того, чтобы сократить ссылку, введите адрес ссылки в поле URL и нажмите кнопку "Сократить".</p>
             <p>Так же Вы можете добавить описание и список тегов, облегчающие поиск ссылки.</p>
+            <p class="text-center" id="fieldUrl"></p>
         </div>
 
         <div class="col-md-4">
-            <form action="/createUrl" method="post">
+            <form ng-submit="createUrl()">
                 <div class="form-group">
-                    <input class="form-control" name="url" type="text" placeholder="Введите URL" >
+                    <input class="form-control" ng-model="url_long" type="text" placeholder="Введите URL" >
                 </div>
                 <div class="form-group">
-                    <textarea name="description" id="" rows="2" class="form-control" placeholder="Добавьте описание"></textarea>
+                    <textarea ng-model="description" id="" rows="2" class="form-control" placeholder="Добавьте описание"></textarea>
                 </div>
                 <div class="form-group">
-                    <textarea name="tags" id="" rows="2" class="form-control" placeholder="Добавьте через пробел теги"></textarea>
+                    <textarea ng-model="tags" id="" rows="2" class="form-control" placeholder="Добавьте через пробел теги"></textarea>
                 </div>
                 <div class="form-group">
-                <button type="submit" class="btn-block btn btn-primary btn-lg">Сократить</button>
+                    <button type="submit" class="btn-block btn btn-primary btn-lg">Сократить</button>
                 </div>
             </form>
         </div>
@@ -36,7 +37,12 @@
     <div class="row">
         <div class="col-md-12">
             <div class="well text-center">
-                Пользователь <b><%=user.username.toUpperCase()%></b>, общее количество переходов по вашим ссылкам = <b>{{totalAuthCounter()}}</b>.
+                <p>Пользователь <b><%=user.username.toUpperCase()%></b>, общее количество переходов по вашим ссылкам = <b>{{totalAuthCounter()}}</b>.</p>
+                <form action="/logout" method="post">
+                    <button type="submit" class="btn btn-primary">
+                        ВЫЙТИ <i class="fa fa-sign-out"></i>
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -56,31 +62,7 @@
             <tbody>
             <tr ng-repeat="url in urls | orderBy: sortParam">
                 <td>
-                    <button class="btn btn-default glyphicon glyphicon-pencil" title="Редактировать" data-toggle="modal" data-target="#Modal-{{url._id}}"></button>
-                    <div class="modal fade" id="Modal-{{url._id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <form action="/updateUrl" method="post">
-                                    <div class="modal-header form-group">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                                            <a href="" class="glyphicon glyphicon-remove"></a></button>
-                                        <h4 class="modal-title" id="myModalLabel">Изменение ссылки <a href="{{url.url_long}}" target="_blank" >{{url.url_long}}</a></h4>
-                                    </div>
-                                    <div class="form-group modal-body">
-                                        <input class="form-control" type="hidden" name="_id" value="{{url._id}}">
-                                        <h3>Описание</h3>
-                                        <textarea class="form-control" name="description" type="text">{{url.description}}</textarea>
-                                        <h3>Теги</h3>
-                                        <textarea class="form-control" name="tags" type="text">{{tagsArr(url.tags)}}</textarea>
-                                    </div>
-                                    <div class="modal-footer form-group">
-                                        <button class="btn btn-primary">Сохранить изменения</button>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                    <a href="/url/{{url._id}}" class="btn btn-default glyphicon glyphicon-pencil" title="Подробнее"></a>
                 </td>
                 <td><a href="{{url.url_short}}" target="_blank">{{url.url_short}}</a></td>
                 <td><a href="{{url.url_long}}" target="_blank">{{url.url_long}}</a></td>

@@ -33,6 +33,26 @@
             </p>
             <p>{{url.description}}</p>
         </div>
+
     </div>
+    <% if (user) { %>
+    <div class="row">
+        <form ng-submit="updateUrl()">
+            <div class="col-md-2"></div>
+            <div class="col-md-4"></div>
+            <div class="col-md-3">
+                <textarea class="form-control" ng-model="tags" id="" rows="4" placeholder="Введите новые теги через пробел"></textarea>
+            </div>
+            <div class="col-md-3">
+                <textarea class="form-control" ng-model="description" id="" rows="4" placeholder="Введите новое описание"></textarea>
+            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-4"></div>
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-default" style="margin-top: 10px">Сохранить изменения</button>
+            </div>
+        </form>
+    </div>
+    <% } %>
 </div>
 
